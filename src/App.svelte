@@ -6,6 +6,7 @@
     import { activities, getAllActivities, startNewActivity, updateActivity } from './stores/activityStore';
     import { formatSeconds } from "./common";
     import ActivityItem from './lib/ActivityItem.svelte';
+    import { parse } from 'svelte/compiler';
 
     let dir = window.location.pathname;
 
@@ -66,7 +67,7 @@
         <p class="title">BILL PERC.</p>
         <i class="statsIcon fa-solid fa-percent" style="border: 1px solid var(--orange); color: var(--orange); background-color: var(--faded-orange);"></i>
       </div>
-      <h4>{Math.abs((billableTime / totalTime) * 100)}%</h4>
+      <h4>{parseInt((billableTime / totalTime) * 100)}%</h4>
     </div>
   </section>
 
@@ -77,8 +78,6 @@
       </div>
       <hr/>
       <div class="col" style="max-height: 300px; overflow-y: auto; gap: 0px;">
-        <div>
-        </div>
         {#each todaysActivities.filter((a) => a.description).reverse() as activity}
           <ActivityItem activity={activity}></ActivityItem>
         {/each}

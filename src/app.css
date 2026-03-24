@@ -118,7 +118,7 @@ button {
   cursor: pointer;
 }
 
-select {
+select, input[type='text'] {
   padding: 8px;
   border-radius: 8px;
   border: 1px solid var(--border);

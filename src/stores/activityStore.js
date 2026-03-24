@@ -30,12 +30,11 @@ export let startNewActivity = () => {
 
 export let updateActivity = (args) => {
     const latest = getLatestActivity();
-
-    if (!latest) return;
+    const targetId = args.id ?? latest.id;
 
     activities.update(currentItems => {
         const updated = currentItems.map(item => {
-            if (item.id === latest.id) {
+            if (item.id === targetId) {
                 return {
                     ...item,
                     description: args.description,
@@ -46,6 +45,14 @@ export let updateActivity = (args) => {
             return item;
         });
 
+        localStorage.setItem(storageItem, JSON.stringify(updated));
+        return updated;
+    });
+};
+
+export let removeActivity = (id) => {
+    activities.update(currentItems => {
+        const updated = currentItems.filter(item => item.id !== id);
         localStorage.setItem(storageItem, JSON.stringify(updated));
         return updated;
     });
