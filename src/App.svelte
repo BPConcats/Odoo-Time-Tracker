@@ -5,14 +5,17 @@
     import Timer from './lib/Timer.svelte';
     import { activities, getAllActivities, startNewActivity, updateActivity } from './stores/activityStore';
     import { formatSeconds } from "./common";
+    import ActivityItem from './lib/ActivityItem.svelte';
 
     let dir = window.location.pathname;
+
     let allActivities = [];
     let todaysActivities = [];
-    onMount(()=>{
-      allActivities = getAllActivities();
-      todaysActivities = allActivities.filter((a) => new Date(Date.parse(a.dateCreated)).toDateString() == new Date().toDateString())
+    let monthActivities = [];
+    let totalTime = 0;
+    let billableTime = 0;
 
+    onMount(()=>{
       window.electronAPI.on("start-activity", (activity) => {
         startNewActivity();
       });
@@ -24,7 +27,10 @@
 
     $: if($activities) {
       allActivities = getAllActivities();
-      todaysActivities = allActivities.filter((a) => new Date(Date.parse(a.dateCreated)).toDateString() == new Date().toDateString())
+      todaysActivities = allActivities.filter((a) => new Date(Date.parse(a.dateCreated)).toDateString() == new Date().toDateString());
+      monthActivities = allActivities.filter((a) => new Date(Date.parse(a.dateCreated)).getMonth() == new Date().getMonth() && new Date(Date.parse(a.dateCreated)).getFullYear() == new Date().getFullYear());
+      totalTime = monthActivities.map(a => a.timeOnTask).reduce((sum, current) => sum + current, 0);
+      billableTime = monthActivities.map(a => a.type == 'billable' ? a.timeOnTask : 0).reduce((sum, current) => sum + current, 0);
     }
 </script>
 
@@ -39,29 +45,28 @@
         <p class="title">TOTAL</p>
         <i class="statsIcon fa-solid fa-clock" style="border: 1px solid var(--blue); color: var(--blue); background-color: var(--faded-blue);"></i>
       </div>
-      <h3>01:00:00</h3>
+      <h3>{formatSeconds(totalTime)}</h3>
     </div>
     <div class="panel">
       <div class="row" style="justify-content: space-between;">
         <p class="title">BILLABLE</p>
         <i class="statsIcon fa-solid fa-dollar-sign" style="border: 1px solid var(--green); color: var(--green); background-color: var(--faded-green);"></i>
       </div>
-      <h3>01:00:00</h3>
+      <h3>{formatSeconds(billableTime)}</h3>
     </div>
     <div class="panel">
       <div class="row" style="justify-content: space-between;">
         <p class="title">NON-BILL</p>
         <i class="statsIcon fa-solid fa-coffee" style="border: 1px solid var(--grey); color: var(--grey); background-color: var(--faded-grey);"></i>
       </div>
-      <h3>01:00:00</h3>
+      <h3>{formatSeconds(monthActivities.map(a => a.type != 'billable' ? a.timeOnTask : 0).reduce((sum, current) => sum + current, 0))}</h3>
     </div>
     <div class="panel">
       <div class="row" style="justify-content: space-between;">
-        <p class="title">PROGRESS</p>
+        <p class="title">BILL PERC.</p>
         <i class="statsIcon fa-solid fa-percent" style="border: 1px solid var(--orange); color: var(--orange); background-color: var(--faded-orange);"></i>
       </div>
-      <h4>50%</h4>
-      <progress value="50" max="100" style="max-width: 100%;"></progress>
+      <h4>{Math.abs((billableTime / totalTime) * 100)}%</h4>
     </div>
   </section>
 
@@ -71,28 +76,11 @@
         <h4>Today's Activities</h4>
       </div>
       <hr/>
-      <div class="col" style="max-height: 300px; overflow-y: scroll; gap: 0px;">
+      <div class="col" style="max-height: 300px; overflow-y: auto; gap: 0px;">
         <div>
         </div>
         {#each todaysActivities.filter((a) => a.description).reverse() as activity}
-          <div class="activity row">
-            <div class="row">
-              <div style="border-radius: 999px; width: 10px; height: 10px; {activity.type == 'billable' ? "background-color: var(--green);" : activity.type == 'non-billable' ? "background-color: var(--blue);" : "background-color: var(--orange);"}"></div>
-              <p style="max-width: 450px; max-lines: 1;">{activity.description}</p>
-            </div>
-            <div class="row">
-              <p
-                style="font-size: 12px;
-                  padding: 0px 6px;
-                  border-radius: 999px;
-                  {activity.type == 'billable' ? "background-color: var(--faded-green);" : activity.type == 'non-billable' ? "background-color: var(--faded-blue);" : "background-color: var(--faded-orange);"}
-                  {activity.type == 'billable' ? "border: 1px solid var(--green);" : activity.type == 'non-billable' ? "border: 1px solid var(--blue);" : "border: 1px solid var(--orange);"}
-                  {activity.type == 'billable' ? "color: var(--green);" : activity.type == 'non-billable' ? "color: var(--blue);" : "color: var(--orange);"}
-                "
-              >{activity.type == 'billable' ? "Billable" : activity.type == 'non-billable' ? "Non-Billable" : "Misc."}</p>
-              <p>{formatSeconds(activity.timeOnTask)}</p>
-            </div>
-          </div>
+          <ActivityItem activity={activity}></ActivityItem>
         {/each}
       </div>
     </div>
@@ -118,23 +106,6 @@
 
   .activities .panel {
     width: 100%;
-  }
-
-  .activity {
-    justify-content: space-between;
-    padding: 10px;
-    align-items: center;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .activity:hover {
-    background-color: var(--faded-border);
-  }
-
-  a {
-    color: var(--green);
-    font-weight: bold;
-    cursor: pointer;
   }
 
   .stats {
