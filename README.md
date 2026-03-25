@@ -1,3 +1,7 @@
+# Downloads
+
+Debian: https://bluepeakstudios.com/downloads/timesheet_1.0.0_amd64.deb
+
 # Svelte + Vite
 
 This template should help get you started developing with Svelte in Vite.
