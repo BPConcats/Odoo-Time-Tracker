@@ -56,7 +56,7 @@
         <div class="row">
             <div style="border-radius: 999px; width: 10px; height: 10px; {activity.type == 'billable' ? "background-color: var(--green);" : activity.type == 'non-billable' ? "background-color: var(--blue);" : "background-color: var(--orange);"}"></div>
             <!-- <p style="max-width: 450px; max-lines: 1;">{activity.description}</p> -->
-            <textarea bind:value={activity.description}></textarea>
+            <textarea bind:value={activity.description} style="min-width: 400px;"></textarea>
         </div>
         <div class="row">
             <select bind:value={activity.type}>
@@ -70,7 +70,7 @@
     {:else}
         <div class="row">
             <div style="border-radius: 999px; width: 10px; height: 10px; {activity.type == 'billable' ? "background-color: var(--green);" : activity.type == 'non-billable' ? "background-color: var(--blue);" : "background-color: var(--orange);"}"></div>
-            <p style="max-width: 450px; max-lines: 1;">{activity.description}</p>
+            <p class="actDescription">{activity.description}</p>
         </div>
         <div class="row">
             <p
@@ -95,6 +95,7 @@
     padding: 10px;
     align-items: center;
     border-bottom: 1px solid var(--border);
+    overflow: hidden;
   }
 
   .activity:hover {
@@ -113,6 +114,18 @@
 
   .activity .iconBtn.fa-edit:hover {
     color: var(--green);
+  }
+
+  .actDescription {
+    display: inline-block;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    max-height: 20px;
+    max-width: 450px;
+    max-lines: 1;
+    font-size: medium;
+    overflow: hidden;
+    line-height: 15pt;
   }
 
   .delConfPopup {

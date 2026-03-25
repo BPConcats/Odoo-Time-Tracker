@@ -19,12 +19,12 @@ function createWindow() {
   });
 
   // Use this for production builds
-  win.loadFile(path.join(__dirname, '../dist/index.html'));
+  // win.loadFile(path.join(__dirname, '../dist/index.html'));
 
   // Uncomment this section of code to use for development.
   // Run 'npm run start' to start both the Svelte server and the
   // election application.
-  /*const devServerUrl = 'http://localhost:5173';
+  const devServerUrl = 'http://localhost:5173';
 
   const loadWithRetry = () => {
     win.loadURL(devServerUrl).catch(() => {
@@ -37,18 +37,11 @@ function createWindow() {
     setTimeout(loadWithRetry, 1000);
   });
 
-  loadWithRetry();*/
+  loadWithRetry();
 
   win.on('closed', () => {
     win = null;
   });
-}
-
-
-function getWindowDisplay(targetWin) {
-  if (!targetWin || targetWin.isDestroyed()) return screen.getPrimaryDisplay();
-  const winBounds = targetWin.getBounds();
-  return screen.getDisplayMatching(winBounds);
 }
 
 function createBottomLeftWindow() {
@@ -69,7 +62,7 @@ function createBottomLeftWindow() {
       y: targetY - winHeight,
       frame: false,
       alwaysOnTop: true,
-      resizable: true,
+      resizable: false,
       webPreferences: {
         contextIsolation: true,
         preload: path.join(__dirname, './preload.cjs')
@@ -77,12 +70,12 @@ function createBottomLeftWindow() {
     });
 
     // Uncomment this line for local development
-    // timerWindow.loadURL('http://localhost:5173');
+    timerWindow.loadURL('http://localhost:5173#timer');
 
     // Use this for production builds
-    timerWindow.loadFile(path.join(__dirname, '../dist/index.html'), {
-      hash: 'timer'
-    });
+    // timerWindow.loadFile(path.join(__dirname, '../dist/index.html'), {
+    //   hash: 'timer'
+    // });
 
     timerWindow.on('closed', () => {
       timerWindow = null;

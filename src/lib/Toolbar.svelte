@@ -1,4 +1,6 @@
 <script>
+    import { setLocalDir } from "../stores/routeStore";
+
     function minimize() {
         window.electronAPI.minimizeWindow();
     }
@@ -14,6 +16,7 @@
         <p style="font-weight: bold;">Time Tracker</p>
     </div>
     <div class="row" style="gap: 20px;">
+        <i on:click={() => {setLocalDir('settings')}} class="button fa-solid fa-gear"></i>
         <i on:click={minimize} class="button fa-regular fa-window-minimize"></i>
         <i on:click={close} class="button fa-solid fa-close"></i>
     </div>

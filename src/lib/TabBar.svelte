@@ -1,4 +1,6 @@
 <script>
+    import { localDir, setLocalDir } from "../stores/routeStore";
+
     function openTimer() {
         window.electronAPI.openBottomLeftWindow();
     }
@@ -6,17 +8,17 @@
 
 <section class="row" style="justify-content: space-between;">
     <div class="row" style="gap: 5px;">
-        <button class="btn selected">Today</button>
-        <!-- <button class="btn">History</button> -->
-        <!-- <button class="btn">Reports</button> -->
+        <button on:click={() => {setLocalDir('today')}} class="btn {$localDir == 'today' ? 'selected' : ''}">Today</button>
+        <button on:click={() => {setLocalDir('history')}} class="btn {$localDir == 'history' ? 'selected' : ''}">History</button>
+        <button on:click={() => {setLocalDir('reports')}} class="btn {$localDir == 'reports' ? 'selected' : ''}">Reports</button>
     </div>
     <div>
-        <!-- <button on:click={()=>{
+        <button on:click={()=>{
             localStorage.clear();
             window.location.reload();
         }} style="background-color: var(--green);">
             Clear Storage
-        </button> -->
+        </button>
         <button on:click={openTimer} style="background-color: var(--green);">
             <i class="fa-solid fa-play" style="margin-right: 5px;"></i>
             Start
