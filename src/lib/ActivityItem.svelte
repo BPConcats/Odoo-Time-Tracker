@@ -96,6 +96,7 @@
     align-items: center;
     border-bottom: 1px solid var(--border);
     overflow: hidden;
+    min-height: fit-content;
   }
 
   .activity:hover {
