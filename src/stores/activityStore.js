@@ -13,6 +13,8 @@ export let getLatestActivity = () => {
 }
 
 export let startNewActivity = () => {
+    if(!getLatestActivity() || !getLatestActivity().description) return;
+
     localStorage.getItem(storageItem);
     let todayActivities = JSON.parse(localStorage.getItem(storageItem)) ?? [];
     todayActivities.push({

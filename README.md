@@ -1,6 +1,6 @@
 # Downloads
 
-Debian: https://bluepeakstudios.com/downloads/timesheet_1.0.4_amd64.deb
+Debian: https://bluepeakstudios.com/downloads/timesheet_1.0.5_amd64.deb
 
 # Svelte + Vite
 

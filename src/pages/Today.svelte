@@ -13,7 +13,6 @@
     onMount(()=>{
       window.electronAPI.on("start-activity", (activity) => {
         startNewActivity();
-        alert("NEW ACTIVITY STARTED!")
       });
 
       window.electronAPI.on("save-close", (activity) => {
