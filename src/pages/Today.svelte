@@ -13,6 +13,7 @@
     onMount(()=>{
       window.electronAPI.on("start-activity", (activity) => {
         startNewActivity();
+        alert("NEW ACTIVITY STARTED!")
       });
 
       window.electronAPI.on("save-close", (activity) => {
@@ -23,7 +24,6 @@
     $: if($activities) {
       allActivities = getAllActivities();
       todaysActivities = allActivities.filter((a) => new Date(Date.parse(a.dateCreated)).toDateString() == new Date().toDateString());
-      console.log(todaysActivities);
       monthActivities = allActivities.filter((a) => new Date(Date.parse(a.dateCreated)).getMonth() == new Date().getMonth() && new Date(Date.parse(a.dateCreated)).getFullYear() == new Date().getFullYear());
       totalTime = todaysActivities.map(a => a.timeOnTask).reduce((sum, current) => sum + current, 0);
       billableTime = todaysActivities.map(a => a.type == 'billable' ? a.timeOnTask : 0).reduce((sum, current) => sum + current, 0);
